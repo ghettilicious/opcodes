@@ -1,0 +1,83 @@
+#Create Main Emulator Class
+#Main Emulator class handles the CPU, memory, display
+
+class Chip8:
+    def __init__(self):
+        self.memory = [0] * 4096
+        self.V = [0] * 16 # CPU registers
+        self.I = 0 # Index register
+        self.pc = 0x200 # Program counter start s at 0x200
+        self.gfx = [0] * 64 * 32 # Display (64x32 pixels)
+        self.delay_timer = 0
+        self.sound_timer = 0
+        self.stack = []
+        self.keys = [0] * 16 
+        self.draw_flag = False
+        
+    
+    def load_rom(self, rom_path):
+        with open(rom_path, 'rb') as f:
+            rom = f.read()
+            for i in range(len(rom)):
+                self.memory[0x200 + i] = rom[i]
+    def emulate_cycle(self):
+        #Fetch, decode, and execute instructions
+        pass
+    
+    def draw_graphics(self):
+        # Implement drawing logic
+        pass
+    
+    def set_keys(self):
+        # Implement key press logic
+        pass
+# Implement the Fetch-Decode-Execute Cycle
+
+def emulate_cycle(self):
+    opcode = self.memory[self.pc] << 8 | self.memory[self.pc + 1]
+    self.pc += 2
+    
+    #Decode and execute opcode
+    if opcode == 0x00E0: # Clear the screen
+        self.gfx = [0] * 64 * 32
+        self.draw_flag = True
+    elif opcode == 0x00EE: # Return from subroutine
+        self.pc = self.stack.pop()
+        
+    #Add more opcodes here
+
+
+# Handle Graphics and Input
+
+import pygame
+
+def draw_graphics(self):
+    for y in range(32):
+        for x in range(64):
+            if self.gfx[(y * 64) + x] == 1:
+                pygame.draw.rect(screen, (255, 255, 255), (x * 10, y * 10, 10, 10))
+        pygame.display.flip()
+
+def set_keys(self):
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_1:
+                self.keys[0] = 1
+            # Map other keys
+
+
+# Run the Emulator
+
+if __name__ == "__main__":
+    chip8 = Chip8()
+    chip8.load_rom("path_to_rom.ch8")
+    
+    pygame.init()
+    screen = pygame.display.set_mode((640, 320))
+    
+    while True:
+        chip8.emulate_cycle()
+        if chip8.draw_flag: 
+            chip8.draw_graphics()
+        chip8.set_keys()
+        pygame.time.wait(10)
